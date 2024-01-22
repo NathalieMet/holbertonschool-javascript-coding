@@ -18,18 +18,21 @@ request(url, (error, response, body) => {
   try {
     const todos = JSON.parse(body);
     const completedTasks = {};
+
     todos.forEach((todo) => {
       if (todo.completed) {
         if (completedTasks[todo.userId]) {
-          completedTasks[todo.userId]++;
+          completedTasks[todo.userId] += 1;
         } else {
           completedTasks[todo.userId] = 1;
         }
       }
     });
-    for (const userId in completedTasks) {
-      console.log(`${userId}: ${completedTasks[userId]}`);
-    }
+    const page = {};
+    Object.entries(completedTasks).forEach(([userId, completedTasks]) => {
+      page[userId] = completedTasks;
+    });
+    console.log(page);
   } catch (parseError) {
     console.error('Error parsing JSON:', parseError.message);
   }
