@@ -17,11 +17,29 @@ request(url, (error, response, body) => {
 
   try {
     const movies = JSON.parse(body).results;
-    const characterId = '18';
+    const characterId = '/18/';
+    let count = 0;
 
-    const moviesWithWedge = movies.filter((movie) => movie.characters.includes(`https://swapi-api.hbtn.io/api/people/${characterId}/`));
-    console.log(moviesWithWedge.length);
+    for (const movie of movies) {
+      for (const character of movie.characters) {
+        if (character.includes(characterId)) {
+          count += 1;
+          break;
+        }
+      }
+    }
+    console.log(count);
   } catch (parseError) {
     console.error('Error parsing JSON:', parseError.message);
   }
 });
+
+// try {
+// const movies = JSON.parse(body).results;
+//  const characterId = '18';
+// let count = 0;
+
+// const moviesWithWedge = movies.filter((movie) => movie.characters.includes(`https://swapi-api.hbtn.io/api/people/${characterId}/`));
+// console.log(moviesWithWedge.length);
+// } catch (parseError) {
+// console.error('Error parsing JSON:', parseError.message);
