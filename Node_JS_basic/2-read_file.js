@@ -16,6 +16,7 @@ function countStudents(path) {
     for (const line of lines) {
       if (isFirstLine) {
         isFirstLine = false;
+        // eslint-disable-next-line no-continue
         continue;
       }
 
@@ -41,7 +42,7 @@ function countStudents(path) {
     console.log(`Number of students in CS: ${csStudents}. List: ${listOfCsStudents.join(', ')}`);
     console.log(`Number of students in SWE: ${sweStudents}. List: ${listOfSweStudents.join(', ')}`);
   } catch (error) {
-    console.error(`Cannot load the database: ${error.message}`);
+    throw new Error('Cannot load the database');
   }
 }
 
