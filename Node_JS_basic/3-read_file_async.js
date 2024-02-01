@@ -39,10 +39,16 @@ function countStudentsAsync(path) {
           }
         }
 
-        console.log(`Number of students: ${totalStudents}`);
-        console.log(`Number of students in CS: ${csStudents}. List: ${listOfCsStudents.join(', ')}`);
-        console.log(`Number of students in SWE: ${sweStudents}. List: ${listOfSweStudents.join(', ')}`);
-        resolve(); // Resolve without passing any result as it is not defined in your function
+        const result = {
+          sentence1: `Number of students: ${totalStudents}`,
+          sentence2: `Number of students in CS: ${csStudents}. List: ${listOfCsStudents.join(', ')}`,
+          sentence3: `Number of students in SWE: ${sweStudents}. List: ${listOfSweStudents.join(', ')}`,
+        };
+        console.log(result.sentence1);
+        console.log(result.sentence2);
+        console.log(result.sentence3);
+
+        resolve(result); // Resolve with the result object
       })
       .catch((err) => {
         console.error('Cannot load the database', err);

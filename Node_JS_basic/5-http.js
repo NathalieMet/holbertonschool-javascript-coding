@@ -1,81 +1,41 @@
 const http = require('http');
 const path = require('path');
 const fs = require('fs').promises;
-
-async function countStudentsAsync(path) {
-  try {
-    const data = await fs.readFile(path, 'utf8');
-    const lines = data.split('\n').filter((line) => line.trim() !== '');
-
-    let totalStudents = 0;
-    let csStudents = 0;
-    let sweStudents = 0;
-    const listOfCsStudents = [];
-    const listOfSweStudents = [];
-
-    let isFirstLine = true;
-
-    for (const line of lines) {
-      if (isFirstLine) {
-        isFirstLine = false;
-        // eslint-disable-next-line no-continue
-        continue;
-      }
-
-      const fields = line.split(',');
-
-      if (fields.length === 4) {
-        totalStudents += 1;
-        const [firstName, , , field] = fields;
-
-        if (field.trim() === 'CS') {
-          csStudents += 1;
-          listOfCsStudents.push(firstName);
-        }
-
-        if (field.trim() === 'SWE') {
-          sweStudents += 1;
-          listOfSweStudents.push(firstName);
-        }
-      }
-    }
-
-    const result = `\nNumber of students: ${totalStudents}\nNumber of students in CS: ${csStudents}. List: ${listOfCsStudents.join(', ')}\nNumber of students in SWE: ${sweStudents}. List: ${listOfSweStudents.join(', ')}`;
-    return result;
-  } catch (err) {
-    console.error('Cannot load the database', err);
-    throw new Error('Cannot load the database');
-  }
-}
+const countStudentsAsync = require('./3-read_file_async');
 
 const app = http.createServer(async (req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+
   if (req.url === '/') {
-    // Handle root path
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
     res.end('Hello Holberton School!');
   } else if (req.url === '/students') {
-    // Handle /students path
     const filePath = path.resolve(__dirname, 'database.csv');
 
     try {
       await fs.access(filePath);
-      const data = await countStudentsAsync(filePath);
 
-      res.writeHead(200, { 'Content-Type': 'text/plain' });
-      res.end(`This is the list of our students${data}`);
+      res.write('This is the list of our students\n');
+
+      countStudentsAsync(filePath)
+        .then((result) => {
+          res.write(`${result.sentence1}\n`);
+          res.write(`${result.sentence2}\n`);
+          res.write(`${result.sentence3}`);
+          res.end();
+        });
     } catch (error) {
-      res.writeHead(404, { 'Content-Type': 'text/plain' });
       res.end('Database not found');
     }
   } else {
-    // Handle other paths
-    res.writeHead(404, { 'Content-Type': 'text/plain' });
     res.end('Not Found');
   }
 });
 
-const PORT = 1245;
+const port = 1245;
+module.exports = app;
 
-app.listen(PORT, () => {
-  console.log(`Server is running and listening on port ${PORT}`);
-});
+if (require.main === module) {
+  app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
+  });
+}
