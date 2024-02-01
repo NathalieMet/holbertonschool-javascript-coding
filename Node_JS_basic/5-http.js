@@ -2,38 +2,6 @@ const http = require('http');
 const path = require('path');
 const fs = require('fs').promises;
 
-const PORT = 1245;
-
-const app = http.createServer(async (req, res) => {
-  if (req.url === '/') {
-    // Handle root path
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end('Hello Holberton School!');
-  } else if (req.url === '/students') {
-    // Handle /students path
-    const filePath = path.resolve(__dirname, 'database.csv');
-
-    try {
-      await fs.access(filePath);
-      const data = await countStudentsAsync(filePath);
-
-      res.writeHead(200, { 'Content-Type': 'text/plain' });
-      res.end(`This is the list of our students${data}`);
-    } catch (error) {
-      res.writeHead(404, { 'Content-Type': 'text/plain' });
-      res.end('Database not found');
-    }
-  } else {
-    // Handle other paths
-    res.writeHead(404, { 'Content-Type': 'text/plain' });
-    res.end('Not Found');
-  }
-});
-
-app.listen(PORT, () => {
-  console.log(`Server is running and listening on port ${PORT}`);
-});
-
 async function countStudentsAsync(path) {
   try {
     const data = await fs.readFile(path, 'utf8');
@@ -79,3 +47,35 @@ async function countStudentsAsync(path) {
     throw new Error('Cannot load the database');
   }
 }
+
+const app = http.createServer(async (req, res) => {
+  if (req.url === '/') {
+    // Handle root path
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('Hello Holberton School!');
+  } else if (req.url === '/students') {
+    // Handle /students path
+    const filePath = path.resolve(__dirname, 'database.csv');
+
+    try {
+      await fs.access(filePath);
+      const data = await countStudentsAsync(filePath);
+
+      res.writeHead(200, { 'Content-Type': 'text/plain' });
+      res.end(`This is the list of our students${data}`);
+    } catch (error) {
+      res.writeHead(404, { 'Content-Type': 'text/plain' });
+      res.end('Database not found');
+    }
+  } else {
+    // Handle other paths
+    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    res.end('Not Found');
+  }
+});
+
+const PORT = 1245;
+
+app.listen(PORT, () => {
+  console.log(`Server is running and listening on port ${PORT}`);
+});
