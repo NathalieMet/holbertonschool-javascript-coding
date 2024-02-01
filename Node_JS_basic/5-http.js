@@ -2,33 +2,39 @@ const http = require('http');
 const path = require('path');
 const fs = require('fs').promises;
 
+const PORT = 1245;
+
 const app = http.createServer(async (req, res) => {
-  if (req.url === '/students') {
+  if (req.url === '/') {
+    // Handle root path
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('Hello Holberton School!');
+  } else if (req.url === '/students') {
+    // Handle /students path
     const filePath = path.resolve(__dirname, 'database.csv');
 
     try {
       await fs.access(filePath);
+      const data = await countStudentsAsync(filePath);
 
-      res.write('This is the list of our students');
-
-      await countStudentsAsync(filePath, res);
-
+      res.writeHead(200, { 'Content-Type': 'text/plain' });
+      res.end(`This is the list of our students\n${data}`);
     } catch (error) {
-      res.write('Database not found');
+      res.writeHead(404, { 'Content-Type': 'text/plain' });
+      res.end('Database not found');
     }
-  } else if (req.url === '/') {
-    res.write('Hello Holberton School!');
+  } else {
+    // Handle other paths
+    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    res.end('Not Found');
   }
-
-  res.end();
 });
 
-const PORT = 1245;
 app.listen(PORT, () => {
   console.log(`Server is running and listening on port ${PORT}`);
 });
 
-async function countStudentsAsync(path, res) {
+async function countStudentsAsync(path) {
   try {
     const data = await fs.readFile(path, 'utf8');
     const lines = data.split('\n').filter((line) => line.trim() !== '');
@@ -44,6 +50,7 @@ async function countStudentsAsync(path, res) {
     for (const line of lines) {
       if (isFirstLine) {
         isFirstLine = false;
+        // eslint-disable-next-line no-continue
         continue;
       }
 
@@ -65,16 +72,10 @@ async function countStudentsAsync(path, res) {
       }
     }
 
-    res.write(`\nNumber of students: ${totalStudents}`);
-    res.write(`\nNumber of students in CS: ${csStudents}. List: ${listOfCsStudents.join(', ')}`);
-    res.write(`\nNumber of students in SWE: ${sweStudents}. List: ${listOfSweStudents.join(', ')}`);
-    res.end();
-
+    const result = `\nNumber of students: ${totalStudents}\nNumber of students in CS: ${csStudents}. List: ${listOfCsStudents.join(', ')}\nNumber of students in SWE: ${sweStudents}. List: ${listOfSweStudents.join(', ')}`;
+    return result;
   } catch (err) {
     console.error('Cannot load the database', err);
-    res.write('Error reading the database');
-    res.end();
+    throw new Error('Cannot load the database');
   }
 }
-
-module.exports = app;

@@ -17,6 +17,7 @@ function countStudentsAsync(path) {
         for (const line of lines) {
           if (isFirstLine) {
             isFirstLine = false;
+            // eslint-disable-next-line no-continue
             continue;
           }
 
