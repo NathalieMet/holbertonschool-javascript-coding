@@ -18,7 +18,7 @@ const app = http.createServer(async (req, res) => {
       const data = await countStudentsAsync(filePath);
 
       res.writeHead(200, { 'Content-Type': 'text/plain' });
-      res.end(`This is the list of our students\n${data}`);
+      res.end(`This is the list of our students${data}`);
     } catch (error) {
       res.writeHead(404, { 'Content-Type': 'text/plain' });
       res.end('Database not found');
