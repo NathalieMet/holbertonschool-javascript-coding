@@ -1,8 +1,8 @@
-const fs = require('fs').promises;
+const fs = require('fs');
 
 function countStudentsAsync(path) {
   return new Promise((resolve, reject) => {
-    fs.readFile(path, 'utf8')
+    fs.promises.readFile(path, 'utf8')
       .then((data) => {
         const lines = data.split('\n').filter((line) => line.trim() !== '');
 
@@ -50,8 +50,7 @@ function countStudentsAsync(path) {
 
         resolve(result); // Resolve with the result object
       })
-      .catch((err) => {
-        console.error('Cannot load the database', err);
+      .catch(() => {
         reject(new Error('Cannot load the database'));
       });
   });
