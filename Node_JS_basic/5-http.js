@@ -10,21 +10,20 @@ const app = http.createServer(async (req, res) => {
   if (req.url === '/') {
     res.end('Hello Holberton School!');
   } else if (req.url === '/students') {
-    try {
-      await fs.access(database);
-
-      res.write('This is the list of our students\n');
-
-      countStudentsAsync(database)
-        .then((result) => {
-          res.write(`${result.sentence1}\n`);
-          res.write(`${result.sentence2}\n`);
-          res.write(`${result.sentence3}`);
-          res.end();
-        });
-    } catch (error) {
-      res.end('Database not found');
-    }
+    fs.access(database)
+      .then(() => {
+        res.write('This is the list of our students\n');
+        return countStudentsAsync(database);
+      })
+      .then((result) => {
+        res.write(`${result.sentence1}\n`);
+        res.write(`${result.sentence2}\n`);
+        res.write(`${result.sentence3}`);
+        res.end();
+      })
+      .catch(() => {
+        res.end('Database not found');
+      });
   } else {
     res.end('Not Found');
   }
