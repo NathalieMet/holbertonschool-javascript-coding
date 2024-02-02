@@ -21,8 +21,8 @@ const app = http.createServer(async (req, res) => {
         res.write(`${result.sentence3}`);
         res.end();
       })
-      .catch(() => {
-        res.end('Database not found');
+      .catch((error) => {
+        res.end(error.message);
       });
   } else {
     res.end('Not Found');
