@@ -51,7 +51,7 @@ function countStudentsAsync(path) {
       console.log(result.sentence2);
       console.log(result.sentence3);
 
-      resolve(result); // Resolve with the result object
+      resolve(result);
     });
   });
 }
