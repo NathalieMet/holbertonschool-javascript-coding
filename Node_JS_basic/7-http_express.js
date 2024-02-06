@@ -7,28 +7,27 @@ const PORT = 1245;
 
 const database = process.argv[2];
 
-
 // Define route for the endpoint '/'
 app.get('/', (req, res) => {
   res.type('text/plain').send('Hello Holberton School!');
 });
 
 app.get('/students', async (req, res) => {
-    countStudentsAsync(database)
-      .then((result) => {
+  countStudentsAsync(database)
+  .then((result) => {
       res.write('This is the list of our students\n');
       res.write(`${result.sentence1}\n`);
       res.write(`${result.sentence2}\n`);
       res.write(`${result.sentence3}`);
       res.end();
     })
-    .catch ((error) => {
-      res.type('text/plain').send('Database not found');
+    .catch((error) => {
+      res.send('This is the list of our students\n' + error.message);
     });
 });
 
 // Start the server
-app.listen(PORT)
+app.listen(PORT);
 
 // Export the app variable
 module.exports = app;
