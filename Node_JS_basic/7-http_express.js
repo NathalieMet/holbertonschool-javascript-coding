@@ -14,7 +14,7 @@ app.get('/', (req, res) => {
 
 app.get('/students', async (req, res) => {
   countStudentsAsync(database)
-  .then((result) => {
+    .then((result) => {
       res.write('This is the list of our students\n');
       res.write(`${result.sentence1}\n`);
       res.write(`${result.sentence2}\n`);
@@ -22,7 +22,7 @@ app.get('/students', async (req, res) => {
       res.end();
     })
     .catch((error) => {
-      res.send('This is the list of our students\n' + error.message);
+      res.send(`This is the list of our students\n${error.message}`);
     });
 });
 
