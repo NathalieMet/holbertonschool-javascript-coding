@@ -14,22 +14,20 @@ class StudentsController {
   }
 
   static getAllStudentsByMajor(request, response) {
-    try {
-      const { major } = request.query;
-
-      if (major === 'CS' || major === 'SWE') {
-        const result = readDatabase(database);
-        if (major === 'CS') {
-          response.status(200).send(`List: ${result.listOfCsStudents.join(', ')}\n`);
+    const { major } = request.params;
+    readDatabase(database)
+      .then((result) => {
+        if (major === 'CS' || major === 'SWE') {
+          if (major === 'CS') {
+            response.status(200).send(`List: ${result.CS.join(', ')}`);
+          } else {
+            response.status(200).send(`List: ${result.SWE.join(', ')}`);
+          }
         } else {
-          response.status(200).send(`List: ${result.listOfSweStudents.join(', ')}\n`);
+          response.status(500).send('Major parameter must be CS or SWE');
         }
-      } else {
-        response.status(500).send('Major parameter must be CS or SWE');
-      }
-    } catch (error) {
-      response.status(500).send('Cannot load the database');
-    }
+      })
+      . catch((error) => { response.status(500).send(error.message); });
   }
 }
 
