@@ -28,9 +28,7 @@ app.get('/students', async (req, res) => {
 });
 
 // Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running and listening on port ${PORT}`);
-});
+app.listen(PORT)
 
 // Export the app variable
 module.exports = app;
