@@ -1,5 +1,4 @@
 const http = require('http');
-const fs = require('fs').promises;
 const countStudentsAsync = require('./3-read_file_async');
 
 const database = process.argv[2];
@@ -9,12 +8,10 @@ const app = http.createServer(async (req, res) => {
 
   if (req.url === '/') {
     res.end('Hello Holberton School!');
-  } else if (req.url === '/students') {
-    fs.access(database)
-      .then(() => {
-        res.write('This is the list of our students\n');
-        return countStudentsAsync(database);
-      })
+  }
+  if (req.url === '/students') {
+    res.write('This is the list of our students\n');
+    countStudentsAsync(database)
       .then((result) => {
         res.write(`${result.sentence1}\n`);
         res.write(`${result.sentence2}\n`);
@@ -24,8 +21,6 @@ const app = http.createServer(async (req, res) => {
       .catch((error) => {
         res.end(error.message);
       });
-  } else {
-    res.end('Not Found');
   }
 });
 

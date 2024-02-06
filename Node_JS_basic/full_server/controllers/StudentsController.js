@@ -1,13 +1,15 @@
 const readDatabase = require('../utils');
+const database = (process.argv[2] || './database.csv')
 
 class StudentsController {
 	static getAllStudents(request, response) {
 		try {
 			const result = readDatabase(database);
-			response.status(200).send('This is the list of our students\n');
-			response.write(`Number of students in CS: ${result.listOfCsStudents.length}. List: ${result.listOfCsStudents.join(', ')}\n`);
-			response.write(`Number of students in SWE: ${result.listOfSweStudents.length}. List: ${result.listOfSweStudents.join(', ')}\n`);
-			response.end();
+			response.status(200).send(`
+			This is the list of our students\n
+			Number of students in CS: ${result.listOfCsStudents.length}. List: ${result.listOfCsStudents.join(', ')}\n
+			Number of students in SWE: ${result.listOfSweStudents.length}. List: ${result.listOfSweStudents.join(', ')}
+		  `);
 		  } catch (error) {
 			response.status(500).send('Cannot load the database');
 		  }
