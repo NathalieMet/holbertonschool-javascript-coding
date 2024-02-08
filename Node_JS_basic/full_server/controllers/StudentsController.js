@@ -1,4 +1,4 @@
-import readDatabase from '../utils';
+const readDatabase = require ('../utils');
 
 const database = (process.argv[2] || './database.csv');
 
