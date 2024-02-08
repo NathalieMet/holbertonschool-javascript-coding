@@ -17,13 +17,9 @@ class StudentsController {
     readDatabase(database)
       .then((result) => {
         const { major } = request.params;
-        if (major === 'CS' || major === 'SWE') {
-          if (major === 'CS') {
+          if ((major === 'CS') || (major === 'SWE')) {
             response.status(200).send(`List: ${result[major].join(', ')}`);
           } else {
-            response.status(200).send(`List: ${result[major].join(', ')}`);
-          }
-        } else {
           response.status(500).send('Major parameter must be CS or SWE');
         }
       })
