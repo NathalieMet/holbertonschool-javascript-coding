@@ -40,7 +40,7 @@ function readDatabase(filePath) {
         CS: listOfCsStudents,
         SWE: listOfSweStudents,
       };
-
+      
       resolve(result);
     });
   });

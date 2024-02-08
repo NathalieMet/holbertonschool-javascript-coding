@@ -13,9 +13,9 @@ class StudentsController {
   }
 
   static getAllStudentsByMajor(request, response) {
-    const { major } = request.params;
     readDatabase(database)
-      .then((result) => {
+    .then((result) => {
+        const { major } = request.params;
         if (major === 'CS' || major === 'SWE') {
           if (major === 'CS') {
             response.status(200).send(`List: ${result.CS.join(', ')}`);
@@ -30,4 +30,4 @@ class StudentsController {
   }
 }
 
-export default StudentsController;
+module.exports = StudentsController;
