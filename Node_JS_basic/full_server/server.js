@@ -1,5 +1,6 @@
-const express = require ('express');
 import routes from './routes';
+
+const express = require('express');
 
 const app = express();
 const PORT = 1245;

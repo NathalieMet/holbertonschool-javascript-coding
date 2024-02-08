@@ -1,4 +1,4 @@
-const readDatabase = require ('../utils');
+const readDatabase = require('../utils');
 
 const database = (process.argv[2] || './database.csv');
 
@@ -14,7 +14,7 @@ class StudentsController {
 
   static getAllStudentsByMajor(request, response) {
     readDatabase(database)
-    .then((result) => {
+      .then((result) => {
         const { major } = request.params;
         if (major === 'CS' || major === 'SWE') {
           if (major === 'CS') {

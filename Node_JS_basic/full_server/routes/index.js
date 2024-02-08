@@ -1,8 +1,8 @@
-const express = require('express');
-
 import StudentsController from '../controllers/StudentsController';
 
 import AppController from '../controllers/AppController';
+
+const express = require('express');
 
 const router = express.Router();
 
