@@ -6,8 +6,6 @@ const PORT = 1245;
 
 app.use('/', routes);
 
-app.listen(PORT, () => {
-  console.log(`Server is running and listening on port ${PORT}`);
-});
+app.listen(PORT);
 
 export default app;

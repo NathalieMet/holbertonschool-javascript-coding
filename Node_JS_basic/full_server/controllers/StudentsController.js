@@ -6,7 +6,6 @@ class StudentsController {
   static getAllStudents(request, response) {
     readDatabase(database)
       .then((result) => {
-        console.log(result);
         const sentence = 'This is the list of our students\n';
         response.status(200).send(`${sentence}Number of students in CS: ${result.CS.length}. List: ${result.CS.join(', ')}\nNumber of students in SWE: ${result.SWE.length}. List: ${result.SWE.join(', ')}`);
       })
